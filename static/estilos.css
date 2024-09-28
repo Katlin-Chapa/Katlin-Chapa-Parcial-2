@@ -1,0 +1,52 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f0f6; /* Color de fondo claro con un toque de corinto */
+    color: #4a1c27; /* Color de texto oscuro */
+}
+
+h1, h2, h3, h4 {
+    color: #9B1B30; /* Color corinto para los encabezados */
+}
+
+/* Estilos de la barra de navegación */
+.navbar {
+    margin-bottom: 20px; /* Espacio debajo de la barra de navegación */
+    background-color: #9B1B30; /* Color corinto para la barra de navegación */
+}
+
+.nav-link {
+    color: #f8f9fa; /* Color blanco para los enlaces */
+}
+
+.nav-link:hover {
+    color: #FFC107; /* Color amarillo al pasar el ratón sobre los enlaces */
+}
+
+/* Estilo para el contenido principal */
+main {
+    background-color: #ffffff; /* Fondo blanco para el contenido */
+    padding: 20px; /* Relleno */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
+/* Estilos del pie de página */
+footer {
+    margin-top: 20px; /* Espacio encima del pie de página */
+    background-color: #9B1B30; /* Color corinto */
+    color: #f8f9fa; /* Color de texto blanco */
+    text-align: center; /* Centrar texto */
+    padding: 10px; /* Espaciado interno */
+}
+
+footer p {
+    margin: 0; /* Sin margen en el párrafo del pie de página */
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    main {
+        padding: 10px; /* Menos relleno en pantallas pequeñas */
+    }
+}
