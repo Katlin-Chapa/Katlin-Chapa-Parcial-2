@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Listado de Mascotas{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Listado de Mascotas</h1>
+    
+    <!-- Formulario de búsqueda -->
+    <form method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Buscar mascota por nombre..." value="{{ request.GET.search }}">
+            <select name="profesor" class="form-select">
+                <option value="">-- Seleccionar Profesor --</option>
+                {% for profesor in profesores %}
+                    <option value="{{ profesor.pk }}" {% if profesor.pk|stringformat:"i" == request.GET.profesor %}selected{% endif %}>
+                        {{ profesor.nombres }} {{ profesor.apellidos }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </div>
+    </form>
+
+    <!-- Botón para agregar nueva mascota (si el usuario tiene permiso) -->
+    {% if can_add %}
+        <a href="{% url 'mascota_create' %}" class="btn btn-success mb-4">
+            <i class="bi bi-plus-lg"></i> Agregar Mascota
+        </a>
+    {% endif %}
+    
+    <!-- Tabla de mascotas -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Género</th>
+                <th>Profesor Responsable</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mascota in page_obj %}
+                <tr>
+                    <td>{{ mascota.nombre }}</td>
+                    <td>{{ mascota.genero }}</td>
+                    <td>{{ mascota.profesor.nombres }} {{ mascota.profesor.apellidos }}</td>
+                    <td>
+                        <!-- Botones de acciones (si el usuario tiene permisos) -->
+                        {% if can_change %}
+                            <a href="{% url 'mascota_update' mascota.pk %}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+                        {% endif %}
+                        {% if can_delete %}
+                            <a href="{% url 'mascota_delete' mascota.pk %}" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No hay mascotas disponibles.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <nav aria-label="Paginación">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ request.GET.search }}&profesor={{ request.GET.profesor }}" aria-label="Anterior">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}&search={{ request.GET.search }}&profesor={{ request.GET.profesor }}">{{ num }}</a>
+                </li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ request.GET.search }}&profesor={{ request.GET.profesor }}" aria-label="Siguiente">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

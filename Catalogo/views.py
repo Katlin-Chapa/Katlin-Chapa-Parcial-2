@@ -83,21 +83,25 @@ class MascotaListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset().order_by('profesor')
         search_query = self.request.GET.get('search')
-        pais_id = self.request.GET.get('profesor')
+        profesor_id = self.request.GET.get('profesor')  # Cambié el nombre de la variable a 'profesor_id'
 
         if search_query:
             queryset = queryset.filter(nombre__icontains=search_query)
+
+        if profesor_id:
+            queryset = queryset.filter(profesor_id=profesor_id)  # Filtrar por profesor
+
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['profesor'] = Profesor.objects.all()
+        context['profesores'] = Profesor.objects.all()  # Lista de profesores
         context['can_add'] = self.request.user.has_perm('Catalogo.add_mascota')
         context['can_change'] = self.request.user.has_perm('Catalogo.change_mascota')
         context['can_delete'] = self.request.user.has_perm('Catalogo.delete_mascota')
 
         # Paginación
-        paginator = Paginator(context['mascotas'], 5)  
+        paginator = Paginator(context['mascotas'], 5)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         context['page_obj'] = page_obj
@@ -105,6 +109,7 @@ class MascotaListView(LoginRequiredMixin, ListView):
         # Total de páginas
         context['total_pages'] = paginator.num_pages
         return context
+
     
 class MascotaViewSet(viewsets.ModelViewSet):
     queryset = Mascota.objects.all()
@@ -119,6 +124,10 @@ class MascotaCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
     success_url = reverse_lazy('mascota_list')
     login_url = reverse_lazy('login')
     permission_required = 'Catalogo.add_mascota'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profesores'] = Profesor.objects.all()  # Agregar lista de profesores
+        return context
 
 class MascotaUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Mascota
@@ -127,6 +136,10 @@ class MascotaUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
     success_url = reverse_lazy('mascota_list')
     login_url = reverse_lazy('login')
     permission_required = 'Catalogo.change_mascota'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profesores'] = Profesor.objects.all()  # Agregar lista de profesores
+        return context
 
 class MascotaDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Mascota
