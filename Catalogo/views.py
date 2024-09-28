@@ -21,10 +21,10 @@ class ProfesorListView(LoginRequiredMixin, ListView):
     permission_required = 'Catalogo.view_profesor'
 
     def get_queryset(self):
-        queryset = super().get_queryset().order_by('nombre')
+        queryset = super().get_queryset().order_by('nombres')
         search_query = self.request.GET.get('search')
         if search_query:
-            queryset = queryset.filter(nombre__icontains=search_query)
+            queryset = queryset.filter(nombres__icontains=search_query)
         return queryset
 
     def get_context_data(self, **kwargs):

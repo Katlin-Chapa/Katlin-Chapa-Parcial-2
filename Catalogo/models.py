@@ -2,10 +2,14 @@ from django.db import models
 
 # Create your models here.
 class Profesor(models.Model):
+    GENERO_CHOICES = [
+        ('F', 'Femenino'),
+        ('M', 'Masculino'),
+    ]
     celula = models.CharField(max_length=20, primary_key=True)  
     nombres = models.CharField(max_length=50)
     apellidos = models.CharField(max_length=50)
-    genero = models.CharField(max_length=10)  
+    genero = models.CharField(max_length=1, choices=GENERO_CHOICES)  
 
     class Meta:
         verbose_name = 'Profesor'
