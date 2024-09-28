@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'Autenticacion',
     'Inicio',
+    'Catalogo',
 ]
 
 # Creación de token autenticacion
